@@ -8,3 +8,13 @@
 - располагает четные числа в порядке убывания модуля,
 - располагает нечетные числа в порядке возрастания модуля,
 - рассчитывает среднее арифметическое всех чисел, кратных 3.
+
+
+http://www.avprog.narod.ru/progs/emu8086/8086_instruction_set.html
+
+
+https://poschitat.online/shestnadcaterichnyi-kalkulyator
+
+
+https://poschitat.online/perevod-sistem-schisleniya
+
