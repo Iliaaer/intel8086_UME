@@ -71,7 +71,7 @@ LOOOP_START_ODD:
         NEG AX                 
         NO_NEGATIVE_WORD1_ODD:
         CMP AX, DI
-        JL NO_SWAP_ODD          
+        JNAE NO_SWAP_ODD          
         MOV AX, [BP+SI]
         XCHG AX, [BP+SI+2]      
         MOV [BP+SI], AX         
@@ -83,7 +83,7 @@ LOOOP_START_ODD:
     CMP DX, 0                   
     JE EXIT_SORT_ODD
     JMP LOOOP_START_ODD         
-EXIT_SORT_ODD:
+EXIT_SORT_ODD:  
 ; ===============================     
 ; SORT ARRAY EVEN
 ; ===============================     
@@ -111,7 +111,7 @@ LOOOP_START_EVEN:
         NEG AX                 
         NO_NEGATIVE_WORD1_EVEN:
         CMP AX, DI
-        JG NO_SWAP_EVEN         
+        JNBE NO_SWAP_EVEN         
         MOV AX, [BP+SI]
         XCHG AX, [BP+SI+2]      
         MOV [BP+SI], AX         
@@ -123,7 +123,7 @@ LOOOP_START_EVEN:
     CMP DX, 0                   
     JE EXIT_SORT_EVEN
     JMP LOOOP_START_EVEN        
-EXIT_SORT_EVEN:
+EXIT_SORT_EVEN:   
 ; ===============================     
 ; AVG VALUE 3
 ; ===============================  
