@@ -25,7 +25,9 @@ addres_array_odd DW 00030h   ; адрес для записи нечетных элементов
 index_arrar_odd DW 0         ; индекс текущего нечетного элемента массива
 
 count_value_3 DW 0           ; количество чисел, которые делятся на 3
-addres_value_sum_3 DW 00050h ; адрес для записи суммы чисел     
+addres_value_sum_3 DW 00070h ; адрес для записи суммы чисел      
+addres_array_avg_value_3 DW 00050h  
+index_array_avg_value_3 DW 0
  
 start:                
     MOV SI, 0             ; индекс текущего элемента массива
@@ -157,7 +159,7 @@ EXIT_SORT_EVEN:
 ; AVG VALUE 3
 ; ===============================  
 MOV SI, 0                        ; индекс текущего элемента массива
-MOV BP, [addres_value_sum_3]     ; адрес где находится сумма значений  
+MOV BP, [addres_array_avg_value_3]     ; адрес где находится сумма значений  
 MOV CX, 12                       ; количество значений в массиве  
 MOV BX, 3                        ; пишем в BX его делитель    
 AVG_OUTPUT:   
@@ -175,6 +177,9 @@ AVG_OUTPUT:
     MOV DI, [addres_value_sum_3] ; записываем адрес памяти, в которой будет находится сумма всех чисел которые делятся на 3
     MOV AX, array[SI]            ; загрузка числа для проверки в регистр AX
     ADD [DI], AX                 ; суммируем число чтобы в памяти была сумма всех чисел которые делятся на 3 
+    MOV DI, [index_array_avg_value_3]
+    MOV [BP+DI], AX
+    ADD [index_array_avg_value_3], 2
     NO_SUM3:
     ADD SI, 2                    ; переход к следующему элементу массив 
 LOOP AVG_OUTPUT

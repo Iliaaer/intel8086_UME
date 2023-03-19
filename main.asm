@@ -1,156 +1,171 @@
-; Для массива из 12 16-разрядных чисел со знаком 
-; разработать блок-схему алгоритма, программу на языке ассемблера 
-; и в машинных кодах микропроцессора К1810ВМ86, 
-; которая сортирует массив слов на четные и нечетные. 
-; А также:
-; располагает четные числа в порядке убывания модуля,
-; располагает нечетные числа в порядке возрастания модуля,
-; рассчитывает среднее арифметическое всех чисел, кратных 3.
-; http://www.avprog.narod.ru/progs/emu8086/8086_instruction_set.html
- 
- 
-ORG 100h                     ; начальный адрес программы
+ORG 100h                     
 
-array DW 2, -4, 1, -1, -6    ; массив для проверки         
-len_array DW 5               ; размер массива
+array DW 004D2h, 0162Eh, 02334h, 00D80h, 0E12Eh, 0F6D7h, 01538h, 02694h, 010E1h, 0223Dh, 0F7C3h, 0E58Bh
+;array DW 0DDDDh, 0BCDAh, 0BCDFh, 012A3h, 0574Fh, 00000h, 01357h, 08888h, 01337h, 04488h, 0228Ch, 0DEF1h
+;array DW 0FFFFh, 00000h, 08000h, 00001h, 04000h, 0C000h, 0F000h, 00FFFh, 08FFFh, 08765h, 01122h, 0FFFFh       
                        
-count_even DW 0              ; количество четных элементов
-addres_array_even DW 00010h  ; адрес для записи четных элементов
-index_array_even DW 0        ; индекс текущего чеnного элемента массива
+count_even DW 0              
+addres_array_even DW 00010h  
+index_array_even DW 0        
                 
-count_odd DW 0               ; количество нечетных элементов
-addres_array_odd DW 00020h   ; адрес для записи нечетных элементов 
-index_arrar_odd DW 0         ; индекс текущего нечетного элемента массива
+count_odd DW 0               
+addres_array_odd DW 00030h   
+index_arrar_odd DW 0         
 
-count_value_3 DW 0           ; количество чисел, которые делятся на 3
-addres_value_sum_3 DW 0F0F0h ; адрес для записи суммы чисел
-MOV [0F0F0h], 0
+count_value_3 DW 0           
+addres_value_sum_3 DW 00050h      
+addres_array_avg_value_3 DW 00050h  
+index_array_avg_value_3 DW 0
  
 start:                
-    MOV SI, 0             ; индекс текущего элемента массива
-    MOV BP, 0             ; адрес начала массива  
-    MOV CX, [len_array]   ; количество значений в массиве    
-    
-    MOV BL, 3             ; делитель 3, на что надо проверить   
+    MOV SI, 0           
+    MOV BP, 0           
+    MOV CX, 12             
     OUTPUT:   
-        MOV AX, array[SI] ; загрузка числа для проверки в регистр AX
-        
-        IDIV BL           ; делим число со знаком на 3
-        CMP AH, 0         ; проверяем есть ли остаток или нет
-        MOV AX, array[SI] ; записать число кторое мы проверяем назад 
-        JE SUM_3          ; если число делится на 3, то переходим в местку (ZF=1)       
-         
-        GO_NEXT_OUTPUT: 
-        
-        TEST AX, 1        ; проверка на четность
-        JNZ NUMBER_ODD    ; переход, если число нечетное   (ZF=0)
-        JZ NUMBER_EVEN    ; переход, если число четное (ZF=1)      
-    
-
-    NUMBER_ODD:                     ; если число четное
-         MOV DI, [index_arrar_odd]  ; записываем в DI значение индекса массива для четных
-         MOV BP, [addres_array_odd] ; записываем в BP адресс массива для четных 
-         MOV [BP+DI], AX            ; сохранение четного числа в массиве   
-         ADD SI, 2                  ; переход к следующему элементу массива
-         INC [count_odd]            ; увеличение количества четных чисел  
-         ADD [index_arrar_odd], 2   ; увеличиваем индекс след значения массива для четных
-    LOOP OUTPUT                     ; переходим в метку OUTPUT ЕСЛИ CX != 0
-    JCXZ NEXT_ARRAY_SORT_ODD        ; если CX = 0, то идем дальше
-      
-    NUMBER_EVEN:                     ; если число нечетное
-         MOV DI, [index_array_even]  ; записываем в DI значение индекса массива для нечетных
-         MOV BP, [addres_array_even] ; записываем в BP адресс массива для нечетных   
-         MOV [BP+DI], AX             ; сохранение четного числа в массиве   
-         ADD SI, 2                   ; переход к следующему элементу массива
-         INC [count_even]            ; увеличение количества четных чисел  
-         ADD [index_array_even], 2   ; увеличиваем индекс след значения массива для нечетных
-    LOOP OUTPUT                      ; переходим в метку OUTPUT ЕСЛИ CX != 0 
-    JCXZ NEXT_ARRAY_SORT_ODD         ; если CX = 0, то идем дальше
-    
-    SUM_3:                            ; если делится на 3
-        INC [count_value_3]          ; прибавляем единицу счетчик 
-        MOV DI, [addres_value_sum_3] ; записываем адрес памяти, в которой будет находится сумма всех чисел которые делятся на 3
-        ADD [DI], AX                 ; суммируем число чтобы в памяти была сумма всех чисел которые делятся на 3   
-    JMP GO_NEXT_OUTPUT               ; Переход на метку без условия
-
-
+        MOV AX, array[SI] 
+        TEST AX, 1        
+        JNZ NUMBER_ODD    
+        JZ NUMBER_EVEN            
+    NUMBER_ODD:                   
+         MOV DI, [index_arrar_odd] 
+         MOV BP, [addres_array_odd] 
+         MOV [BP+DI], AX            
+         ADD SI, 2                  
+         INC [count_odd]            
+         ADD [index_arrar_odd], 2   
+    LOOP OUTPUT                     
+    JCXZ NEXT_ARRAY_SORT        
+    NUMBER_EVEN:                
+         MOV DI, [index_array_even]  
+         MOV BP, [addres_array_even] 
+         MOV [BP+DI], AX             
+         ADD SI, 2                   
+         INC [count_even]            
+         ADD [index_array_even], 2   
+    LOOP OUTPUT                      
+    JCXZ NEXT_ARRAY_SORT         
+NEXT_ARRAY_SORT:
 ; ===============================     
 ; SORT ARRAY ODD
 ; ===============================
-
-NEXT_ARRAY_SORT_ODD:    
-MOV CX, [count_odd]             ; количество значений в массиве 
-CMP CX, 0                       ; сравнивает количество значений в массиве с 0
-JE NO_LOOP_ODD:                 ; если количество = 0, то пропускаем сортировку
-MOV DX, 1                       ; счетчикдо какого элемента массива можно идти (с конца)
-LOOP1_ODD:
-    MOV BX, 0                   ; проверка на то, была ли перестановка или нет
-    MOV SI, 0                   ; индекс текущего элемента массива
-    MOV BP, [addres_array_odd]  ; адрес начала массива      
-    LOOP2_ODD:
-        MOV [01111h], CX
-        SUB [01111h], DX
-        CMP SI, [01111h]        ; Сравнивает два операнда - сравнивает текущее смешение с его концом
-        JG END_LOOP2_0DD        ; Переход если первый операдн больше или равен второму -> SI>= CD-DX | IF SF=0F 
-        MOV AX, [BP+SI]         ; записывает в AX значение из массива
-        CMP AX, [BP+SI+2]       ; Сравнивает операнд массива и след его значение 
-        JLE NO_SWAP_ODD         ; Переход если первый операнд меньше или равен второму -> AX<=[BP+SI+2] | IF SF!=OF OR ZF=1
-        XCHG AX, [BP+SI+2]      ; Меняет местами операнды
-        MOV [BP+SI], AX         ; Записывает большее значение в массив
-        MOV BX, 1               ; записываем 1 - значит пеерстановка была
+MOV AX, [count_odd]    
+MOV [00001h], AX 
+DEC [00001h]                    
+MOV BX, 0                       
+MOV BP, [addres_array_odd]      
+LOOOP_START_ODD:
+    CMP BX, [00001h]            
+    JGE EXIT_SORT_ODD           
+    MOV CX, [00001h]            
+    SUB CX, BX                  
+    MOV SI, 0                   
+    MOV DX, 0                   
+    MOV DI, 0
+    LOOP_SORT_ODD:     
+        MOV DI, [BP+SI+2]
+        TEST DI, 08000h
+        JZ NO_NEGATIVE_WORD2_ODD
+        NEG DI
+        NO_NEGATIVE_WORD2_ODD:
+        MOV AX, [BP+SI] 
+        TEST AX, 08000h
+        JZ NO_NEGATIVE_WORD1_ODD              
+        NEG AX                 
+        NO_NEGATIVE_WORD1_ODD:
+        CMP AX, DI
+        JNAE NO_SWAP_ODD          
+        MOV AX, [BP+SI]
+        XCHG AX, [BP+SI+2]      
+        MOV [BP+SI], AX         
+        MOV DX, 1               
         NO_SWAP_ODD:
-        ADD SI, 2               ; прибавляем 2, чтобы дальше идти по массиву
-        JMP LOOP2_ODD           ; Переход на метку без условия 
-    END_LOOP2_0DD:
-    CMP BX, 1                   ; если в BX 1 или нет
-    JE LOOP1_ODD                ; Если BX=1, то переходим в метку LOOP1 | IF ZF=1
-    JMP NEXT_ARRAY_SORT_EVEN
-NO_LOOP_ODD:     
-
+        ADD SI, 2               
+        LOOP LOOP_SORT_ODD      
+    INC BX                      
+    CMP DX, 0                   
+    JE EXIT_SORT_ODD
+    JMP LOOOP_START_ODD         
+EXIT_SORT_ODD:  
 ; ===============================     
 ; SORT ARRAY EVEN
-; ===============================
-      
-NEXT_ARRAY_SORT_EVEN:    
-MOV CX, [count_even]            ; количество значений в массиве 
-CMP CX, 0                       ; сравнивает количество значений в массиве с 0
-JE NO_LOOP_EVEN:                ; если количество = 0, то пропускаем сортировку
-MOV DX, 1                       ; счетчикдо какого элемента массива можно идти (с конца)
-LOOP1_EVEN:
-    MOV BX, 0                   ; проверка на то, была ли перестановка или нет
-    MOV SI, 0                   ; индекс текущего элемента массива
-    MOV BP, [addres_array_even] ; адрес начала массива      
-    LOOP2_EVEN:
-        MOV [01111h], CX
-        SUB [01111h], DX
-        CMP SI, [01111h]        ; Сравнивает два операнда - сравнивает текущее смешение с его концом
-        JG END_LOOP2_EVEN       ; Переход если первый операдн больше или равен второму -> SI>= CD-DX | IF SF=0F 
-        MOV AX, [BP+SI]         ; записывает в AX значение из массива
-        CMP AX, [BP+SI+2]       ; Сравнивает операнд массива и след его значение 
-        JGE NO_SWAP_EVEN        ; Переход если первый операнд меньше или равен второму -> AX<=[BP+SI+2] | IF SF!=OF OR ZF=1
-        XCHG AX, [BP+SI+2]      ; Меняет местами операнды
-        MOV [BP+SI], AX         ; Записывает большее значение в массив
-        MOV BX, 1               ; записываем 1 - значит пеерстановка была
+; ===============================     
+MOV AX, [count_even]    
+MOV [00001h], AX 
+DEC [00001h]                    
+MOV BX, 0                       
+MOV BP, [addres_array_even]     
+LOOOP_START_EVEN:
+    CMP BX, [00001h]            
+    JGE EXIT_SORT_EVEN          
+    MOV CX, [00001h]            
+    SUB CX, BX                  
+    MOV SI, 0                   
+    MOV DX, 0                   
+    LOOP_SORT_EVEN:
+        MOV DI, [BP+SI+2]
+        TEST DI, 08000h
+        JZ NO_NEGATIVE_WORD2_EVEN
+        NEG DI
+        NO_NEGATIVE_WORD2_EVEN:
+        MOV AX, [BP+SI] 
+        TEST AX, 08000h
+        JZ NO_NEGATIVE_WORD1_EVEN              
+        NEG AX                 
+        NO_NEGATIVE_WORD1_EVEN:
+        CMP AX, DI
+        JNBE NO_SWAP_EVEN         
+        MOV AX, [BP+SI]
+        XCHG AX, [BP+SI+2]      
+        MOV [BP+SI], AX         
+        MOV DX, 1               
         NO_SWAP_EVEN:
-        ADD SI, 2               ; прибавляем 2, чтобы дальше идти по массиву
-        JMP LOOP2_EVEN          ; Переход на метку без условия 
-    END_LOOP2_EVEN:
-    CMP BX, 1                   ; если в BX 1 или нет
-    JE LOOP1_EVEN               ; Если BX=1, то переходим в метку LOOP1 | IF ZF=1
-NO_LOOP_EVEN:  
-
+        ADD SI, 2               
+        LOOP LOOP_SORT_EVEN     
+    INC BX                      
+    CMP DX, 0                   
+    JE EXIT_SORT_EVEN
+    JMP LOOOP_START_EVEN        
+EXIT_SORT_EVEN:   
 ; ===============================     
 ; AVG VALUE 3
-; ===============================
-MOV AX, 0                       ; обнуляем регистры
-MOV BX, 0                       ; обнуляем регистры
-MOV BP, [addres_value_sum_3]    ; записываем в BP адрес где находится вся сумма значений
-MOV AX, [BP]                    ; записываем в AX значения из адреса
-MOV BX, [count_value_3]         ; записываем в BX количесвто этих значений
-CMP BX, 0                       ; сравниваем количество с нулем
-JE NO_IDIV_AVG                  ; если количество = 0, то пропускаем деление (на ноль делить нельзя)
-IDIV BL                         ; делим сумму всех значений на количество
+; ===============================  
+MOV SI, 0                       
+MOV BP, [addres_array_avg_value_3]    
+MOV CX, 12                       
+MOV BX, 3                        
+AVG_OUTPUT:   
+    MOV AX, array[SI]            
+    MOV DX, 0                    
+    TEST AX, 08000h              
+    JZ NO_NEGATIVE               
+    MOV DX, 0FFFFh               
+    NO_NEGATIVE:
+    IDIV BX                      
+    CMP DX, 0                                          
+    JNE NO_SUM3                  
+    INC [count_value_3]          
+    MOV DI, [addres_value_sum_3] 
+    MOV AX, array[SI]            
+    ADD [DI], AX
+    MOV DI, [index_array_avg_value_3]
+    MOV [BP+DI], AX
+    ADD [index_array_avg_value_3], 2                 
+    NO_SUM3:
+    ADD SI, 2                    
+LOOP AVG_OUTPUT
+ 
+MOV AX, 0                       
+MOV BX, 0                       
+MOV BP, [addres_value_sum_3]    
+MOV AX, [BP]                    
+MOV DX, 0  
+TEST AX, 08000h                 
+JZ NO_NEGATIVE_IDIV             
+MOV DX, 0FFFFh                  
+NO_NEGATIVE_IDIV: 
+MOV BX, [count_value_3]         
+CMP BX, 0                       
+JE NO_IDIV_AVG                  
+IDIV BX                         
 NO_IDIV_AVG:
-    
-END
-
+HLT    
