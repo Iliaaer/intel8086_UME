@@ -29,7 +29,7 @@ start:
     MOV SI, 0           
     MOV BP, 0           
     MOV CX, 12
-    MOV BX, 3              
+    MOV BX, 3             
     OUTPUT:   
         MOV AX, array[SI] 
         MOV DX, 0
@@ -198,5 +198,3 @@ HLT
 ;array DW 0FFFFh, 00000h, 08001h, 00001h, 040C3h, 0C000h, 0F000h, 00FFFh, 08FCFh, 08765h, 01122h, 0FFFFh      
 array DW 00000h, 00003h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h 
 ;array DW 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h  
-
-HLT
