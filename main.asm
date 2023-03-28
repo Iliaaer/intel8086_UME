@@ -1,6 +1,6 @@
 ORG 100h                     
 
-array DW 004D2h, 0162Eh, 02334h, 00D80h, 0E12Eh, 0F6D7h, 01538h, 02694h, 010E1h, 0223Dh, 0F7C3h, 0E58Bh
+;array DW 004D2h, 0162Eh, 02334h, 00D80h, 0E12Eh, 0F6D7h, 01538h, 02694h, 010E1h, 0223Dh, 0F7C3h, 0E58Bh
 ;array DW 0DDDDh, 0BCDAh, 0BCDFh, 012A3h, 0574Fh, 00000h, 01357h, 08888h, 01337h, 04488h, 0228Ch, 0DEF1h
 ;array DW 0FFFFh, 00000h, 08000h, 00001h, 04000h, 0C000h, 0F000h, 00FFFh, 08FFFh, 08765h, 01122h, 0FFFFh       
 ;array DW 07FFBh, 07FFBh, 07FFBh, 07FFBh, 07FFBh, 07FFBh, 07FFBh, 07FFBh, 07FFBh, 07FFBh, 07FFBh, 07FFBh
@@ -8,7 +8,6 @@ array DW 004D2h, 0162Eh, 02334h, 00D80h, 0E12Eh, 0F6D7h, 01538h, 02694h, 010E1h,
 ;[0x0010] - с этой €чейки начинаетс€ массив четных чисел.
 ;[0x0030] - с этой €чейки начинаетс€ массив нечетных чисел.
 ;[0x0050] - с этой €чейки начинаетс€ массив чисел кратных 3.
-;[0x0070] - €чейка дл€ записи суммы чисел кратных 3.
 ;[0x0080] - €чейка дл€ записи среднего арифметического всех чисел кратных 3.
 ;[0x0082] - €чейка дл€ записи остатка среднего арифметиче-ского всех чисел кратных 3.
 
@@ -22,7 +21,6 @@ addres_array_odd DW 00030h
 index_arrar_odd DW 0         
 
 count_value_3 DW 0           
-addres_value_sum_3 DW 00070h 
 addres_avg_value DW 00080h     
 addres_array_avg_value_3 DW 00050h  
 index_array_avg_value_3 DW 0
@@ -196,4 +194,9 @@ NO_NEGATIVE_IDIV_3:
 ADD [DI],   AX  
 MOV [DI+2], DX 
 EXIT_AVG_VALUE:
+HLT
+;array DW 0FFFFh, 00000h, 08001h, 00001h, 040C3h, 0C000h, 0F000h, 00FFFh, 08FCFh, 08765h, 01122h, 0FFFFh      
+array DW 00000h, 00003h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h 
+;array DW 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h, 00002h  
+
 HLT
