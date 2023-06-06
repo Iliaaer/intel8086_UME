@@ -3,7 +3,7 @@
 Ссылка на скачивание: 
 https://emu8086-microprocessor-emulator.en.softonic.com/
 
-Ключь активации: 27R3VDEFYFX4N0VC3FRTQZX
+Ключь активации: ```27R3VDEFYFX4N0VC3FRTQZX```
 
 
 Задание общее:
